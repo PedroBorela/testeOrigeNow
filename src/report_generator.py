@@ -85,6 +85,37 @@ class ReportGenerator:
         except Exception as e:
             print(f"Erro ao salvar gráfico: {e}")
 
+    def save_complete_report(self, df: pd.DataFrame, stats: pd.DataFrame, insight: str, filename: str = "relatorio_completo.txt"):
+        """
+        Gera um relatório compilado com estatísticas e insights da IA.
+        """
+        filepath = os.path.join(self.output_dir, filename)
+        try:
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write("RELATÓRIO INTEGRADO DE ANÁLISE DE PRODUTOS\n")
+                f.write("=" * 50 + "\n\n")
+                
+                f.write("1. RESUMO GERAL\n")
+                f.write("-" * 20 + "\n")
+                f.write(f"Total de Produtos Analisados: {len(df)}\n")
+                f.write(f"Preço Médio Global: R$ {df['price'].mean():.2f}\n\n")
+                
+                f.write("2. ESTATÍSTICAS POR CATEGORIA\n")
+                f.write("-" * 20 + "\n")
+                f.write(stats.to_string())
+                f.write("\n\n")
+                
+                f.write("3. INSIGHTS DA INTELIGÊNCIA ARTIFICIAL\n")
+                f.write("-" * 20 + "\n")
+                f.write(insight)
+                f.write("\n\n")
+                f.write("=" * 50 + "\n")
+                f.write("Relatório gerado automaticamente.")
+            
+            print(f"Relatório COMPLETO salvo em: {filepath}")
+        except Exception as e:
+            print(f"Erro ao salvar relatório completo: {e}")
+
 if __name__ == "__main__":
     # Teste unitário para geração de gráfico
     df = pd.DataFrame({"price": [10, 20, 30, 40, 50, 60, 100]})

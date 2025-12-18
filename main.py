@@ -45,16 +45,22 @@ def main():
     print("-" * 20)
 
     # 4. Geração de Relatórios (Etapa 4 de 4)
-    # print("[4/4] Gerando Relatórios e Arquivos...")
-    # generator = ReportGenerator()
-    
-    # # Gera Excel, CSV, Texto e Gráfico
-    # generator.save_to_excel(df)
-    # generator.save_to_csv(df)
-    # generator.save_insights(insight)
-    # generator.generate_price_chart(df)
-    
-    # print("Concluído! Verifique a pasta 'output'.")
+    print("-" * 20)
+    user_input = input("Deseja gerar o relatório completo e arquivos de dados (CSV/Excel)? (s/n): ").strip().lower()
+
+    if user_input == 's':
+        print("[4/4] Gerando Relatórios e Arquivos...")
+        generator = ReportGenerator()
+        
+        # Gera Excel, CSV, Texto e Gráfico
+        generator.save_to_excel(df)
+        generator.save_to_csv(df)
+        generator.save_complete_report(df, stats, insight)
+        generator.generate_price_chart(df)
+        
+        print("Concluído! Verifique a pasta 'output'.")
+    else:
+        print("Geração de relatórios pulada pelo usuário.")
 
 if __name__ == "__main__":
     # Verifica argumentos de linha de comando

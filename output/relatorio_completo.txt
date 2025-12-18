@@ -1,0 +1,39 @@
+RELATÓRIO INTEGRADO DE ANÁLISE DE PRODUTOS
+==================================================
+
+1. RESUMO GERAL
+--------------------
+Total de Produtos Analisados: 20
+Preço Médio Global: R$ 162.05
+
+2. ESTATÍSTICAS POR CATEGORIA
+--------------------
+          Categoria  Preço Médio  Contagem de Produtos
+0       electronics   332.498333                     6
+1          jewelery   220.995000                     4
+2    men's clothing    51.057500                     4
+3  women's clothing    26.286667                     6
+
+3. INSIGHTS DA INTELIGÊNCIA ARTIFICIAL
+--------------------
+
+        ### 🤖 Análise Automática (Modo Offline)
+        
+        Não foi possível conectar à Inteligência Artificial no momento (Chave de API ausente ou inválida).
+        No entanto, aqui está o resumo dos dados processados:
+        
+        Total de Produtos: 20. Preço Médio: 162.05. Estatísticas: 
+          Categoria  Preço Médio  Contagem de Produtos
+0       electronics   332.498333                     6
+1          jewelery   220.995000                     4
+2    men's clothing    51.057500                     4
+3  women's clothing    26.286667                     6
+        
+        **Interpretação Básica:**
+        1. Observe quais categorias possuem o maior 'Preço Médio' para identificar seus produtos de alto valor.
+        2. Verifique a 'Contagem de Produtos' para entender como seu inventário está distribuído.
+        3. Se houver grande disparidade nos preços médios, considere segmentar sua estratégia de marketing.
+        
+
+==================================================
+Relatório gerado automaticamente.
