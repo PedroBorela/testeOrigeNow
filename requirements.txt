@@ -1,0 +1,8 @@
+requests
+pandas
+openpyxl
+python-dotenv
+google-generativeai
+streamlit
+plotly
+matplotlib
