@@ -29,20 +29,40 @@ class AIAnalyzer:
             # Avisa no console que a chave não foi encontrada
             print("Aviso: GOOGLE_API_KEY não encontrada. Funcionalidades de IA usarão dados simulados.")
 
+    def _generate_local_insight(self, dataframe_summary: str) -> str:
+        """
+        Gera um insight local (sem IA) baseado no resumo dos dados fornecido.
+        Usado como fallback quando a API não está disponível.
+        """
+        return f"""
+        ### 🤖 Análise Automática (Modo Offline)
+        
+        Não foi possível conectar à Inteligência Artificial no momento (Chave de API ausente ou inválida).
+        No entanto, aqui está o resumo dos dados processados:
+        
+        {dataframe_summary}
+        
+        **Interpretação Básica:**
+        1. Observe quais categorias possuem o maior 'Preço Médio' para identificar seus produtos de alto valor.
+        2. Verifique a 'Contagem de Produtos' para entender como seu inventário está distribuído.
+        3. Se houver grande disparidade nos preços médios, considere segmentar sua estratégia de marketing.
+        """
+
     def generate_summary(self, dataframe_summary: str) -> str:
         """
         Gera um resumo ou insight de negócios com base nos dados fornecidos.
         Tenta usar vários modelos em sequência caso o limite de cota seja atingido.
+        Se falhar, gera um insight local.
         
         Args:
             dataframe_summary (str): Uma representação textual dos dados (ex: estatísticas).
             
         Retorna:
-            str: O texto gerado pela IA com a análise.
+            str: O texto gerado pela IA ou o insight local em caso de falha.
         """
-        # Se não tiver chave, retorna um texto padrão para não quebrar a aplicação
+        # Se não tiver chave, usa o fallback local imediatamente
         if not self.has_key:
-            return "Análise de IA (Simulada): O conjunto de dados contém diversos produtos. Os preços variam significativamente. Eletrônicos parecem ser a categoria mais cara."
+            return self._generate_local_insight(dataframe_summary)
 
         # Prompt em português instruindo a IA sobre o que fazer
         prompt = f"""
@@ -55,7 +75,6 @@ class AIAnalyzer:
         """
 
         # Lista de modelos para tentar (Fallback strategy)
-        # Se o primeiro falhar (cota estourada), tenta o próximo
         models_to_try = [
             'gemini-2.0-flash',
             'gemini-2.0-flash-lite',
@@ -73,14 +92,20 @@ class AIAnalyzer:
             except Exception as e:
                 error_msg = str(e)
                 # print(f"Erro com {model_name}: {error_msg}")
-                # Se for erro de cota (429) ou não encontrado (404), continua para o próximo
+                
+                # Se for problema de chave inválida, pare de tentar e vá pro fallback local
+                if "API_KEY_INVALID" in error_msg or "API key not valid" in error_msg:
+                    return self._generate_local_insight(dataframe_summary)
+
+                # Se for erro de cota (429) ou não encontrado (404), continua para o próximo modelo
                 if "429" in error_msg or "404" in error_msg or "Quota exceeded" in error_msg:
                     continue
                 else:
-                    # Se for outro erro grave, retorna logo
-                    return f"Erro ao gerar insight com IA ({model_name}): {error_msg}"
+                    # Se for outro erro, tenta o local também (melhor que crashar ou mostrar erro feio)
+                    return self._generate_local_insight(dataframe_summary)
 
-        return "Erro: Falha ao gerar insights em todos os modelos tentados (Cota excedida ou erro de API)."
+        # Se esgotou todos os modelos e não conseguiu
+        return self._generate_local_insight(dataframe_summary)
 
 if __name__ == "__main__":
     # Teste unitário da classe
